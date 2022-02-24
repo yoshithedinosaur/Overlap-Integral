@@ -19,6 +19,8 @@ class OverlapIntegral: NSObject, ObservableObject {
     @Published var guessesString = ""
     @Published var integralString = ""
     @Published var currentErrorString = ""
+    @Published var orbitalChoice1 = ""
+    @Published var orbitalChoice2 = ""
     @Published var enableButton = true
     
     var boxSize = 0.0
@@ -53,9 +55,13 @@ class OverlapIntegral: NSObject, ObservableObject {
         var maxGuesses: Int = 0
         let boundingBoxCalculator = BoundingBox() ///Instantiates Class needed to calculate the area of the bounding box.
         
-        let lengthOfSide1 = abs(intervalEnd-intervalStart)
-        let lengthOfSide2 = abs(intervalEnd-intervalStart)
-        let actualVal:Double = 1 - exp(-1) ///Actual analytical value of the integral - NEEDS CHANGING
+        let lengthOfSide = abs(intervalEnd-intervalStart)
+        
+        var actualVal = 0.0
+        if ((orbitalChoice1 == "1s") && (orbitalChoice2 == "1s")) {
+            let a_nought = 0.5292
+            actualVal = exp(-separation / a_nought) * (1 + separation/a_nought + pow(separation/a_nought, 2)/3)///Actual analytical value of the integral
+        }
         
         maxGuesses = guesses
         
@@ -67,11 +73,9 @@ class OverlapIntegral: NSObject, ObservableObject {
         
         await updateTotalGuessesString(text: "\(totalGuesses)")
         
-        ///Calculates the value of π from the area of a unit circle
+        finalVal = totalIntegral/Double(totalGuesses) * boundingBoxCalculator.calculateVolume(lengthOfSide1: lengthOfSide, lengthOfSide2: lengthOfSide, lengthOfSide3: lengthOfSide)
         
-        finalVal = totalIntegral/Double(totalGuesses) * boundingBoxCalculator.calculateSurfaceArea(numberOfDimensions: 2, lengthOfSide1: lengthOfSide1, lengthOfSide2: lengthOfSide2, lengthOfSide3: 0.0)
-        
-        error = log(abs(finalVal - actualVal))
+        error = log(abs(finalVal - actualVal)/actualVal)
         
         await updateCurrentErrorString(text: "\(error)")
         
@@ -94,30 +98,35 @@ class OverlapIntegral: NSObject, ObservableObject {
     func calculateMonteCarloIntegral (intervalStart: Double, intervalEnd: Double, maxGuesses: Int) async -> Double {
         
         var numberOfGuesses: Int = 0
-        var point = (xPoint: 0.0, yPoint: 0.0, weightVal: 0.0)
+        var point = (xPoint: 0.0, yPoint: 0.0, zPoint: 0.0, weightVal: 0.0)
         var xRange: [Double] = [0.0, 0.0]
         var yRange: [Double] = [0.0, 0.0]
+        var zRange: [Double] = [0.0, 0.0]
         var guessPoint1 = 0.0
         var guessPoint2 = 0.0
-        var distR = 0.0
+        var parameterVals = (r: 0.0, theta: 0.0, phi: 0.0)
+        
+        let useOrbital = Orbitals()
         
         xRange = [intervalStart, intervalEnd]
         yRange = [intervalStart, intervalEnd]
+        zRange = [intervalStart, intervalEnd]
         
         var integralVal = 0.0
-        var newFunctionPoints : [(xPoint: Double, yPoint: Double, weightVal: Double)] = []
+        var newFunctionPoints : [(xPoint: Double, yPoint: Double, zPoint: Double, weightVal: Double)] = []
         
         while numberOfGuesses < maxGuesses {
             point.xPoint = Double.random(in: xRange[0]...xRange[1])
             point.yPoint = Double.random(in: yRange[0]...yRange[1])
+            point.zPoint = Double.random(in: zRange[0]...zRange[1])
             
             //Orbital function 1
-            distR = calculateDistance(xPoint: point.xPoint, yPoint: point.yPoint, separation: separation, whichOrbital: 1)
-            guessPoint1 = exp(-distR) ///NEEDS TO DYNAMICALLY SWITCH BETWEEN FUNCTIONS
+            parameterVals = calculateParameters(xPoint: point.xPoint, yPoint: point.yPoint, zPoint: point.zPoint, separation: separation, whichOrbital: 1)
+            guessPoint1 = useOrbital.callOrbitalFunc(orbitalChoice: orbitalChoice1, paramterVals: parameterVals)
             
             //Orbital function 2
-            distR = calculateDistance(xPoint: point.xPoint, yPoint: point.yPoint, separation: separation, whichOrbital: 2)
-            guessPoint2 = exp(distR) ///NEEDS TO DYNAMICALLY SWITCH BETWEEN FUNCTIONS
+            parameterVals = calculateParameters(xPoint: point.xPoint, yPoint: point.yPoint, zPoint: point.zPoint, separation: separation, whichOrbital: 2)
+            guessPoint2 = useOrbital.callOrbitalFunc(orbitalChoice: orbitalChoice2, paramterVals: parameterVals)
             
             point.weightVal = guessPoint1 * guessPoint2
             
@@ -155,22 +164,27 @@ class OverlapIntegral: NSObject, ObservableObject {
         return integralVal
     }
     
-    func calculateDistance(xPoint: Double, yPoint: Double, separation: Double, whichOrbital: Int) -> Double {
+    func calculateParameters(xPoint: Double, yPoint: Double, zPoint: Double, separation: Double, whichOrbital: Int) -> (r: Double, theta: Double, phi: Double) {
         
-        var xComp = 0.0
-        var yComp = 0.0
+        var comp = (X: 0.0, Y: 0.0, Z: 0.0)
         var distR = 0.0
+        var theta = 0.0
+        var phi = 0.0
         
+        //For now all orbitals are centered on the x-axis
         if (whichOrbital == 1) { //Left of the x-axis
-            xComp = -separation/2 + xPoint
+            comp.X = -separation/2 + xPoint
         } else if (whichOrbital == 2) { //Right of the x-axis
-            xComp = separation/2 + xPoint
+            comp.X = separation/2 + xPoint
         }
-        yComp = yPoint
+        comp.Y = yPoint
+        comp.Z = zPoint
         
-        distR = sqrt(yComp*yComp + xComp*xComp)
+        distR = sqrt(comp.Z*comp.Z + comp.Y*comp.Y + comp.X*comp.X)
+        theta = atan2(comp.Z, sqrt(comp.Y*comp.Y + comp.X*comp.X))
+        phi = atan2(comp.X, comp.Y)
         
-        return distR
+        return (distR, theta, phi)
         
     }
     
@@ -180,7 +194,7 @@ class OverlapIntegral: NSObject, ObservableObject {
     /// - Parameters:
     ///   - insidePoints: points inside the circle of the given radius
     ///   - outsidePoints: points outside the circle of the given radius
-    @MainActor func updateData(functionPoints: [(xPoint: Double, yPoint: Double, weightVal: Double)]){
+    @MainActor func updateData(functionPoints: [(xPoint: Double, yPoint: Double, zPoint: Double, weightVal: Double)]){
         
         //functionData.append(contentsOf: functionPoints)
     }
