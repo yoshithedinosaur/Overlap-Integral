@@ -17,6 +17,12 @@
 		A3FA42C527C2EC6400ADDF0F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA429B27C2EC6200ADDF0F /* ContentView.swift */; };
 		A3FA42C627C2EC6400ADDF0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3FA429C27C2EC6400ADDF0F /* Assets.xcassets */; };
 		A3FA42C727C2EC6400ADDF0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3FA429C27C2EC6400ADDF0F /* Assets.xcassets */; };
+		A3FA42D727C2ED0D00ADDF0F /* Orbital Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA42D627C2ED0D00ADDF0F /* Orbital Functions.swift */; };
+		A3FA42D827C2ED0D00ADDF0F /* Orbital Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA42D627C2ED0D00ADDF0F /* Orbital Functions.swift */; };
+		A3FA42DA27C2ED2B00ADDF0F /* Calculate Overlap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA42D927C2ED2B00ADDF0F /* Calculate Overlap.swift */; };
+		A3FA42DB27C2ED2B00ADDF0F /* Calculate Overlap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA42D927C2ED2B00ADDF0F /* Calculate Overlap.swift */; };
+		A3FA42DD27C71D8300ADDF0F /* Bounding Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA42DC27C71D8300ADDF0F /* Bounding Box.swift */; };
+		A3FA42DE27C71D8300ADDF0F /* Bounding Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FA42DC27C71D8300ADDF0F /* Bounding Box.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +55,9 @@
 		A3FA42BA27C2EC6400ADDF0F /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FA42BE27C2EC6400ADDF0F /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		A3FA42C027C2EC6400ADDF0F /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		A3FA42D627C2ED0D00ADDF0F /* Orbital Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Orbital Functions.swift"; sourceTree = "<group>"; };
+		A3FA42D927C2ED2B00ADDF0F /* Calculate Overlap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calculate Overlap.swift"; sourceTree = "<group>"; };
+		A3FA42DC27C71D8300ADDF0F /* Bounding Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bounding Box.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +107,10 @@
 			isa = PBXGroup;
 			children = (
 				A3FA429A27C2EC6200ADDF0F /* Overlap_IntegralApp.swift */,
+				A3FA42D627C2ED0D00ADDF0F /* Orbital Functions.swift */,
+				A3FA42D927C2ED2B00ADDF0F /* Calculate Overlap.swift */,
 				A3FA429B27C2EC6200ADDF0F /* ContentView.swift */,
+				A3FA42DC27C71D8300ADDF0F /* Bounding Box.swift */,
 				A3FA429C27C2EC6400ADDF0F /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -300,7 +312,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3FA42C427C2EC6400ADDF0F /* ContentView.swift in Sources */,
+				A3FA42DA27C2ED2B00ADDF0F /* Calculate Overlap.swift in Sources */,
+				A3FA42DD27C71D8300ADDF0F /* Bounding Box.swift in Sources */,
 				A3FA42C227C2EC6400ADDF0F /* Overlap_IntegralApp.swift in Sources */,
+				A3FA42D727C2ED0D00ADDF0F /* Orbital Functions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +324,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3FA42C527C2EC6400ADDF0F /* ContentView.swift in Sources */,
+				A3FA42DB27C2ED2B00ADDF0F /* Calculate Overlap.swift in Sources */,
+				A3FA42DE27C71D8300ADDF0F /* Bounding Box.swift in Sources */,
 				A3FA42C327C2EC6400ADDF0F /* Overlap_IntegralApp.swift in Sources */,
+				A3FA42D827C2ED0D00ADDF0F /* Orbital Functions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
